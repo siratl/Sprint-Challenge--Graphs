@@ -26,7 +26,7 @@ graph = {}
 not_traversed_path = set()
 
 # defining first room in graph
-graph[player.currentRoom.id] = []
+graph[player.currentRoom.id] = {}
 for exit in player.currentRoom.getExits():
     graph[player.currentRoom.id][exit] = '?'
 
@@ -34,6 +34,25 @@ for exit in player.currentRoom.getExits():
 # for rooms that were not traversed
 for exit in player.currentRoom.getExits():
     not_traversed_path.add(f'{player.currentRoom.id}{exit}')
+
+def bfs(starting_vertex):
+    initial_room = starting_vertex
+    queue = []
+    for direction, room in graph[initial_room].items():
+        queue.append([[direction, room]])
+    while len(queue) > 0:
+        path = queue.pop(0)
+        vertex = path[-1]
+        if '?' in graph[vertex[1]].values():
+            for direction, room in path:
+                player.travel(direction)
+                traversalPath.append(direction)
+            break
+        else:
+            for direction, room in graph[vertex[1]].items():
+                if room != initial_room and room not in [room for direction, room in path]:
+                    new_path = list(path) + [[direction, room]]
+                    queue.append(new_path)
 
 # TRAVERSAL TEST
 visited_rooms = set()
