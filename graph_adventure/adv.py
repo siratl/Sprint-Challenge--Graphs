@@ -21,8 +21,19 @@ player = Player("Name", world.startingRoom)
 
 
 # FILL THIS IN
-traversalPath = ['n', 's']
+traversalPath = []
+graph = {}
+not_traversed_path = set()
 
+# defining first room in graph
+graph[player.currentRoom.id] = []
+for exit in player.currentRoom.getExits():
+    graph[player.currentRoom.id][exit] = '?'
+
+
+# for rooms that were not traversed
+for exit in player.currentRoom.getExits():
+    not_traversed_path.add(f'{player.currentRoom.id}{exit}')
 
 # TRAVERSAL TEST
 visited_rooms = set()
