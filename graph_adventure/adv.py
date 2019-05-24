@@ -65,6 +65,41 @@ def reverse_direction(direction):
     if direction == 'e':
         return 'w'
 
+def player_travel():
+    while not_traversed_path:
+        print(player.currentRoom.id)
+        if '?' in graph[player.currentRoom.id].values():
+            next_direction = None
+            initial_room = player.currentRoom.id
+            for exit in graph[initial_room]:
+                if graph[initial_room][exit] == '?':
+                    next_direction = exit
+                    break
+
+            not_traversed_path.remove(f'{initial_room}{next_direction}')
+            player.travel(next_direction)
+            traversalPath.append(next_direction)
+            new_room = player.currentRoom.id
+            
+            if new_room not in graph:
+                graph[player.currentRoom.id] = {}
+                for exit in player.currentRoom.getExits():
+                    graph[player.currentRoom.id][exit] = '?'
+                    
+            graph[initial_room][next_direction] = new_room
+            graph[new_room][reverse_direction(next_direction)] = initial_room
+            
+            for direction, room in graph[new_room].items():
+                if room == '?':
+                    not_traversed_path.add(f'{new_room}{direction}')
+            if f'{new_room}{reverse_direction(next_direction)}' in not_traversed_path:
+                not_traversed_path.remove(f'{new_room}{reverse_direction(next_direction)}')
+        else:
+            bfs(player.currentRoom.id)
+
+player_travel()
+
+
 # TRAVERSAL TEST
 visited_rooms = set()
 player.currentRoom = world.startingRoom
