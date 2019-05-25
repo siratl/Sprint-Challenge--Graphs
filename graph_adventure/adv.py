@@ -46,6 +46,7 @@ def bfs(starting_vertex):
         if '?' in graph[vertex[1]].values():
             for direction, room in path:
                 player.travel(direction)
+                print(player.currentRoom.id)
                 traversalPath.append(direction)
             break
         else:
@@ -67,7 +68,6 @@ def reverse_direction(direction):
 
 def player_travel():
     while not_traversed_path:
-        print(player.currentRoom.id)
         if '?' in graph[player.currentRoom.id].values():
             next_direction = None
             initial_room = player.currentRoom.id
@@ -78,6 +78,7 @@ def player_travel():
 
             not_traversed_path.remove(f'{initial_room}{next_direction}')
             player.travel(next_direction)
+            print(player.currentRoom.id)
             traversalPath.append(next_direction)
             new_room = player.currentRoom.id
             
